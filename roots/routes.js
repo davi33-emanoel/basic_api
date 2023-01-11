@@ -5,7 +5,8 @@ const User = require('../models/User');
 routes.use(express.json());
 
 routes.get("/", async (req,res) =>{
-    res.send("Página inicial");
+    const user = await User.findAll();
+    return res.json(user)
 });
 
 routes.post("/cadastrar", async (req,res)=>{
@@ -22,5 +23,18 @@ routes.post("/cadastrar", async (req,res)=>{
          });
      })
  })
+
+routes.delete("/:id/excluir", async (req, res, next)=> {
+   await  User.destroy({
+        where: {
+          id: req.params.id
+        }
+      }).then(function(User) {
+        res.json({
+          ID: req.params.id
+        });
+      }).catch(next);
+    });
+
  
  module.exports = routes;
